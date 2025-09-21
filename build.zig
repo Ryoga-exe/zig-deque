@@ -2,27 +2,25 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-
     const optimize = b.standardOptimizeOption(.{});
 
-    _ = b.addModule("zig-deque", .{
-        .root_source_file = b.path("src/deque.zig"),
-        .imports = &.{},
-    });
-
-    const lib = b.addStaticLibrary(.{
-        .name = "zig-deque",
+    const mod = b.addModule("zig-deque", .{
         .root_source_file = b.path("src/deque.zig"),
         .target = target,
         .optimize = optimize,
+        .imports = &.{},
+    });
+
+    const lib = b.addLibrary(.{
+        .name = "zig-deque",
+        .root_module = mod,
+        .linkage = .static,
     });
 
     b.installArtifact(lib);
 
     const main_tests = b.addTest(.{
-        .root_source_file = b.path("src/deque.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = mod,
     });
 
     const run_main_tests = b.addRunArtifact(main_tests);
