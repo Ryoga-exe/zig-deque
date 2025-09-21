@@ -2,6 +2,7 @@
     .name = .zig_deque,
     .fingerprint = 0xa500e2834e68a291,
     .version = "0.1.0",
+    .minimum_zig_version = "0.15.1",
     .paths = .{
         "LICENSE",
         "src/",
