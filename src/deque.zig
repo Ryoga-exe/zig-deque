@@ -160,9 +160,9 @@ pub fn Deque(comptime T: type) type {
             };
         }
 
-        pub fn format(self: *const Self, comptime _: []const u8, _: std.fmt.FormatOptions, writer: anytype) !void {
+        pub fn format(self: *const Self, writer: *std.Io.Writer) !void {
             try writer.writeAll("Deque(");
-            try std.fmt.format(writer, "{}", .{T});
+            try writer.print("{}", .{T});
             try writer.writeAll(") { .buf = [");
 
             var it = self.iterator();
@@ -170,11 +170,11 @@ pub fn Deque(comptime T: type) type {
             while (it.next()) |val| try writer.print(", {any}", .{val});
 
             try writer.writeAll("], .head = ");
-            try std.fmt.format(writer, "{}", .{self.head});
+            try writer.print("{}", .{self.head});
             try writer.writeAll(", .tail = ");
-            try std.fmt.format(writer, "{}", .{self.tail});
+            try writer.print("{}", .{self.tail});
             try writer.writeAll(", .len = ");
-            try std.fmt.format(writer, "{}", .{self.len()});
+            try writer.print("{}", .{self.len()});
             try writer.writeAll(" }");
         }
 
@@ -400,7 +400,7 @@ test "format" {
     try deque.pushBack(69);
     try deque.pushBack(420);
 
-    std.debug.print("{}\n", .{deque});
+    std.debug.print("{f}\n", .{deque});
 }
 
 test "nextBack" {
